@@ -12,3 +12,13 @@ student_1.marks.append(55)
 student_1.marks.append(98)
 student_1.marks.append(98)
 print(student_1.average)
+
+class Workingstudent(Student):
+    def __init__(self,name,school, salary):
+        super().__init__(name,school)
+        self.salary = salary
+    @property
+    def monthly_salary(self):
+        return self.salary * 30
+worker_1 = Workingstudent("shakib","cumilla high school", 100)
+print(worker_1.monthly_salary)
