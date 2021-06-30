@@ -8,7 +8,8 @@ def add_movie():
                 {
                         "title" : title,
                         "director": director,
-                        "launching year" : year
+                        "launching year" : year,
+
                 })
 def show_movie():
         for movie in movies:
@@ -18,7 +19,7 @@ def show_movie():
 def print_movie(movie):
         print(f"title : {movie['title']}")
         print(f"director: {movie['director']}")
-        print(f"released year: {movie['launching year']}")
+        print(f"released year: {movie['launching year']}\n")
 
 
 def search_movie():
