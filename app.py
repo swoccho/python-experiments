@@ -29,6 +29,13 @@ def search_movie():
                         print_movie(movie)
 
 
+def remove_movie():
+    user_input = input("Enter a movie name which you want to remove: ")
+    for movie in movies:
+        if movie['title'] == user_input:
+
+            movies.remove(movie)
+
 
 def menu():
         asking = input("Enter 'add' to add, Enter 'see' to see movie list ,Enter 'search' to search movie from your collection or Enter 'exit' to close the app :  ").lower()
@@ -39,6 +46,8 @@ def menu():
                         show_movie()
                 elif asking == "search":
                         search_movie()
+                elif asking == "remove":
+                    remove_movie()
                 else:
                         print("Error.... Please try again with a valid keyword")
 
