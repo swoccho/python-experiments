@@ -22,3 +22,9 @@ class Workingstudent(Student):
         return self.salary * 30
 worker_1 = Workingstudent("shakib","cumilla high school", 100)
 print(worker_1.monthly_salary)
+
+class Greet:
+    def hello(cls):
+        return
+
+
