@@ -60,6 +60,7 @@ def prompt_mark_as_read():
     database.mark_as_read(name)
 
 
+
 def prompt_remove_book():
     name = input("Enter the name which you want to remove from your collection: ").title()
     database.remove_book(name)
