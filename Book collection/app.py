@@ -1,8 +1,5 @@
 from utils import database
 
-
-
-
 USER_CHOICE ="""
 Enter:
 - press 'a' to add books,
@@ -38,19 +35,20 @@ def menu():
             return
 
 
-
-
-
 def prompt_add_books():
     name = input("Enter a book name: ").title()
     author = input("Enter the book Author name: ").title()
+
     database.add_books(name,author)
+
 
 
 def show_books():
     books = database.get_all_books()
     for book in books:
         print(f"{book['name']} by {book['author']} ,{book['read']} \n")
+    if books == []:
+        print("you have not added any books on your collection yet.. please add some books on your collection ..")
 
 
 
@@ -66,6 +64,11 @@ def prompt_remove_book():
     database.remove_book(name)
 
 
-
-
 menu()
+
+
+
+
+
+
+
