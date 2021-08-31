@@ -1,8 +1,9 @@
+
 from utils import database
 
 USER_CHOICE ="""
 Enter:
-- press 'a' to add books,
+- press 'a' to add book on your collection,
 - press 'del' to remove books,
 - press 's' to see the book list,
 - press 'r' to mark a book as read,
@@ -21,6 +22,8 @@ def menu():
             prompt_remove_book()
         elif user_prompt == "s":
             show_books()
+
+
 
         elif user_prompt== "r":
             prompt_mark_as_read()
