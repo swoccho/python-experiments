@@ -16,7 +16,10 @@ def menu():
         elif user_1st == 's':
             prompt_sell()
         elif user_1st == 'd':
-            pass
+            show_all()
+
+        # elif user_1st == "u":
+        #     update()
 
         else:
             print("Unknown Command.... Please try again.....")
@@ -25,6 +28,7 @@ def menu():
 
 
 def prompt_add():
+
     product_code= input("Enter a product code of the product: ")
     product_name = input("Enter the name of the product: ")
     pack_size = input("Enter pack size of the product: ")
@@ -34,15 +38,41 @@ def prompt_add():
 
     database.add_new_product(product_code,product_name,pack_size,Rate,amount)
 
+
 def prompt_sell():
+
     product_code= input("Enter a product code of the product: ")
-    amount = int(input("Enter the amount of the adding product: "))
+    amount = int(input("Enter the amount of the selling product: "))
+
 
     database.sell(product_code,amount)
 
 
 
+def show_all():
+     products = database.product_all()
+     for product in products:
+         print(f"product code: {product['code']}  product name: {product['name']} Available: {product['stock now']}")
 
+
+# def update():
+#     global stock
+#     product_code = input("Enter a product code of the product: ")
+#     re_amount = int(input("Enter the amount of the adding product: "))
+#
+#     products = database.product_all()
+#     for product in products:
+#         while product["code"] == product_code:
+#             s = product["stock now"]
+#             stock_ = int(s)
+#             stock = stock_ + re_amount
+#
+#     database.re_stock(product_code,stock)
+#
+#
+#
+#
+#
 
 
 
@@ -52,6 +82,3 @@ def prompt_sell():
 
 
 menu()
-
-
-
