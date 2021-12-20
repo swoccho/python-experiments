@@ -17,6 +17,12 @@ def menu():
             prompt_sell()
         elif user_1st == 'd':
             show_all()
+        elif user_1st == "r":
+            database.remove()
+
+        elif user_1st=="rs":
+            product_code = int(input("Enter the product code which you want to remove: "))
+            database.remove_specific(product_code)
 
         # elif user_1st == "u":
         #     update()
@@ -39,20 +45,28 @@ def prompt_add():
     database.add_new_product(product_code,product_name,pack_size,Rate,amount)
 
 
+
 def prompt_sell():
 
-    product_code= input("Enter a product code of the product: ")
+    product_code= int(input("Enter a product code of the product: "))
     amount = int(input("Enter the amount of the selling product: "))
 
-
     database.sell(product_code,amount)
+    again = input("Do you want to sell again ?(Y/n) : ").lower()
+    while again != "n":
+        product_code= int(input("Enter a product code of the product: "))
+        amount = int(input("Enter the amount of the selling product: "))
+
+        database.sell(product_code,amount)
+        again = input("Do you want to sell again ?(Y/n) : ").lower()
 
 
 
 def show_all():
      products = database.product_all()
      for product in products:
-         print(f"product code: {product['code']}  product name: {product['name']} Available: {product['stock now']}")
+        print(f"product code: {product['code']}  product name: {product['name']} "
+              f"Available: {product['stock now']} Dispatched: {product['dispatched']} ")
 
 
 # def update():
@@ -77,8 +91,5 @@ def show_all():
 
 
 
-
-
-
-
 menu()
+
