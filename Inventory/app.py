@@ -2,10 +2,13 @@ from utils import database
 
 user_choice = """
 - press 'a' to add product ,
-- press 's' to sell product , 
+- press 's' to sell product ,
+- press 'm' to sell more than one product ,
 - press 'd' to to see product stock in hand now, 
 - press 'q' to quit the inventory.
-"""
+
+Your Choice: """
+
 
 def menu():
     database.create_table()
@@ -15,12 +18,15 @@ def menu():
             prompt_add()
         elif user_1st == 's':
             prompt_sell()
+
+        elif user_1st == "m":
+            more_sell()
         elif user_1st == 'd':
             show_all()
         elif user_1st == "r":
             database.remove()
 
-        elif user_1st=="rs":
+        elif user_1st == "rs":
             product_code = int(input("Enter the product code which you want to remove: "))
             database.remove_specific(product_code)
 
@@ -34,37 +40,42 @@ def menu():
 
 
 def prompt_add():
-
-    product_code= input("Enter a product code of the product: ")
+    product_code = input("Enter a product code of the product: ")
     product_name = input("Enter the name of the product: ")
-    pack_size = input("Enter pack size of the product: ")
-    Rate = input("Enter per unit price: ")
+    rate = input("Enter per unit price: ")
     amount = int(input("Enter the amount of the adding product: "))
 
-
-    database.add_new_product(product_code,product_name,pack_size,Rate,amount)
-
+    database.add_new_product(product_code, product_name, rate, amount)
 
 
 def prompt_sell():
+    try:
 
-    product_code= int(input("Enter a product code of the product: "))
-    amount = int(input("Enter the amount of the selling product: "))
-
-    database.sell(product_code,amount)
-    again = input("Do you want to sell again ?(Y/n) : ").lower()
-    while again != "n":
-        product_code= int(input("Enter a product code of the product: "))
+        product_code = int(input("Enter a product code of the product: "))
         amount = int(input("Enter the amount of the selling product: "))
 
-        database.sell(product_code,amount)
-        again = input("Do you want to sell again ?(Y/n) : ").lower()
+        database.sell(product_code, amount)
 
+    except IndexError and ValueError:
+        print("Unknown Command.... Please try again with correct product code and amount...")
+
+
+def more_sell():
+    try:
+        amount = int(input("Enter how many products you want to sell: "))
+        for i in range(amount):
+            product_code = int(input("\nEnter a product code of the product: "))
+            amount = int(input("Enter the amount of the selling product: "))
+
+            database.sell(product_code, amount)
+
+    except:
+        print("Something went wrong.... Please try again with correct number of products.")
 
 
 def show_all():
-     products = database.product_all()
-     for product in products:
+    products = database.product_all()
+    for product in products:
         print(f"product code: {product['code']}  product name: {product['name']} "
               f"Available: {product['stock now']} Dispatched: {product['dispatched']} ")
 
@@ -89,7 +100,4 @@ def show_all():
 #
 
 
-
-
 menu()
-
