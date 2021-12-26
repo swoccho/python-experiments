@@ -5,6 +5,7 @@ user_choice = """
 - press 's' to sell product ,
 - press 'm' to sell more than one product ,
 - press 'd' to to see product stock in hand now, 
+- press 'r' to re-stock products,
 - press 'q' to quit the inventory.
 
 Your Choice: """
@@ -23,15 +24,22 @@ def menu():
             more_sell()
         elif user_1st == 'd':
             show_all()
-        elif user_1st == "r":
+        elif user_1st == "re":
             database.remove()
 
-        elif user_1st == "rs":
-            product_code = int(input("Enter the product code which you want to remove: "))
-            database.remove_specific(product_code)
+        elif user_1st == "u":
+            prompt_price_update()
 
-        # elif user_1st == "u":
-        #     update()
+        elif user_1st == "r":
+            update()
+
+        elif user_1st == "rs":
+            try:
+                product_code = int(input("Enter the product code which you want to remove: "))
+                database.remove_specific(product_code)
+
+            except IndexError and ValueError:
+                print("something went wrong...Please enter the correct product code..... ")
 
         else:
             print("Unknown Command.... Please try again.....")
@@ -40,12 +48,16 @@ def menu():
 
 
 def prompt_add():
-    product_code = input("Enter a product code of the product: ")
-    product_name = input("Enter the name of the product: ")
-    rate = input("Enter per unit price: ")
-    amount = int(input("Enter the amount of the adding product: "))
+    try:
+        product_code = int(input("Enter a product code of the product: "))
+        product_name = input("Enter the name of the product: ")
+        price = int(input("Enter per unit price: "))
+        amount = int(input("Enter the amount of the adding product: "))
 
-    database.add_new_product(product_code, product_name, rate, amount)
+        database.add_new_product(product_code, product_name, price, amount)
+
+    except IndexError and ValueError:
+        print("Something went wrong. Please try again....")
 
 
 def prompt_sell():
@@ -80,24 +92,21 @@ def show_all():
               f"Available: {product['stock now']} Dispatched: {product['dispatched']} ")
 
 
-# def update():
-#     global stock
-#     product_code = input("Enter a product code of the product: ")
-#     re_amount = int(input("Enter the amount of the adding product: "))
-#
-#     products = database.product_all()
-#     for product in products:
-#         while product["code"] == product_code:
-#             s = product["stock now"]
-#             stock_ = int(s)
-#             stock = stock_ + re_amount
-#
-#     database.re_stock(product_code,stock)
-#
-#
-#
-#
-#
+def prompt_price_update():
+    product_code = int(input("Enter product code to update the price: "))
+    price = int(input("Enter the price to update: "))
+
+    database.update_price(product_code, price)
+
+
+def update():
+    try:
+        product_code = int(input("Enter the product code which you want to re-stock: "))
+        amount = int(input("Enter how many products to re-stock: "))
+        database.re_stock(product_code, amount)
+
+    except IndexError and ValueError:
+        print("Unknown Command.... Please try again with correct product code and amount...")
 
 
 menu()
