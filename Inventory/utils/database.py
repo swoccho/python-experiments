@@ -7,21 +7,24 @@ def create_table():
 
     cursor.execute("CREATE TABLE IF NOT EXISTS inventory(product_code integer primary key ,"
                    "product_name text , price integer , Last_stock integer ,"
-                   " Stock_in_hand integer,Dispatched_stock integer,Total_earning integer)")
+                   " Stock_in_hand integer,Dispatched_stock integer,Total_earning integer,"
+                   " Recent_sold text , Recent_added text )")
 
     connection.commit()
     connection.close()
 
 
-def add_new_product(product_code, product_name, price, amount):
+def add_new_product(product_code, product_name, price, amount, time):
     connection = sqlite3.connect("data.db")
     cursor = connection.cursor()
     dispatched = 0
     total_earning = 0
+
     try:
-        cursor.execute("INSERT INTO inventory VALUES(?,?,?,?,?,?,?)", (product_code, product_name,
-                                                                       price, amount, amount,
-                                                                       dispatched, total_earning,))
+        cursor.execute("INSERT INTO inventory VALUES(?,?,?,?,?,?,?,?,?)", (product_code, product_name,
+                                                                           price, amount, amount,
+                                                                           dispatched, total_earning,
+                                                                           "Not sold yet", time,))
     except sqlite3.IntegrityError:
         print(F"\nThe product of code  {product_code} is already exist.\nTo Update the product price press 'v' or to "
               F"re-stock the product press 'n' ")
@@ -37,13 +40,14 @@ def product_all():
 
     products = [
         {"code": row[0], "name": row[1], "price": row[2], "last stock": row[3], "stock now": row[4],
-         "dispatched": row[5], "total earning": row[6]} for row in cursor.fetchall()]
+         "dispatched": row[5], "total earning": row[6], "sell time": row[7], "add time": row[8]}
+        for row in cursor.fetchall()]
 
     connection.close()
     return products
 
 
-def sell(product_code, amount):
+def sell(product_code, amount, time):
     all_product = product_all()
 
     connection = sqlite3.connect("data.db")
@@ -59,6 +63,7 @@ def sell(product_code, amount):
         stock_now = stock[0] - amount
         dispatched_total = dispatched[0] + amount
         total_earning_now = price[0] * amount + total_earning[0]
+        t = f"{time}({amount} piece)"
 
         if stock_now > 0:
             if stock_now < 20:
@@ -68,6 +73,8 @@ def sell(product_code, amount):
                            (dispatched_total, product_code,))
             cursor.execute("UPDATE inventory SET Total_earning=? WHERE product_code=?",
                            (total_earning_now, product_code,))
+
+            cursor.execute("UPDATE inventory SET Recent_sold=? WHERE product_code=?", (t, product_code,))
 
             connection.commit()
             connection.close()
@@ -87,22 +94,22 @@ def update_price(product_code, price):
     connection.close()
 
 
-def re_stock(product_code, amount):
+def re_stock(product_code, amount, time):
     connection = sqlite3.connect("data.db")
     cursor = connection.cursor()
     all_products = product_all()
     try:
         stock = [product["stock now"] for product in all_products if product_code == product["code"]]
         stock_now = stock[0] + amount
+
         cursor.execute("UPDATE inventory SET Stock_in_hand=? WHERE product_code=?", (stock_now, product_code,))
         cursor.execute("UPDATE inventory SET Last_stock=? WHERE product_code=?", (amount, product_code,))
+        cursor.execute("UPDATE inventory SET Recent_added=? WHERE product_code=?", (time, product_code,))
         connection.commit()
         connection.close()
 
     except IndexError:
         print(f"\nProduct code {product_code} is not available")
-
-
 
 
 def remove():
