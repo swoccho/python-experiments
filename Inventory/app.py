@@ -27,26 +27,17 @@ def menu():
         elif user_1st == 'd':
             show_all()
         elif user_1st == "re":
-            ask = input("[ALERT!!!!] Do you really want to remove all the products? (Y/n): ").lower()
-            if ask == "y":
-                database.remove()
-                print("NOTICE: You have removed all products...")
-            else:
-                print("NOTICE: All products exists.. No action occurred..")
+            prompt_remove_all()
 
-        elif user_1st == "u":
+        elif user_1st == "p":
             prompt_price_update()
 
         elif user_1st == "r":
             update()
 
         elif user_1st == "rs":
-            try:
-                product_code = int(input("Enter the product code which you want to remove: "))
-                database.remove_specific(product_code)
+            prompt_remove_specific()
 
-            except IndexError and ValueError:
-                print("something went wrong...Please enter the correct product code..... ")
 
         else:
             print("Unknown Command.... Please try again.....")
@@ -101,11 +92,21 @@ def show_all():
 
 
 def prompt_price_update():
-    try:
-        product_code = int(input("Enter product code to update the price: "))
-        price = int(input("Enter the price to update: "))
 
-        database.update_price(product_code, price)
+
+
+    try:
+        user = input("Please enter your user name: ")
+        password = input("Please enter your password: ")
+        if user == "admin" and password == "hello":
+
+            product_code = int(input("Enter product code to update the price: "))
+            price = int(input("Enter the price to update: "))
+
+            database.update_price(product_code, price)
+
+        else:
+            print("Username or password is invalid...")
 
     except IndexError and ValueError:
         print("Something went wrong.... Please try again with correct number")
@@ -119,6 +120,44 @@ def update():
 
     except IndexError and ValueError:
         print("Unknown Command.... Please try again with correct product code and amount...")
+
+
+
+def prompt_remove_specific():
+    user = input("Please enter your username: ")
+    password = input("Please enter your password: ")
+    if user == "admin" and password == "hello":
+        try:
+            product_code = int(input("Enter the product code which you want to remove: "))
+            database.remove_specific(product_code)
+
+        except IndexError and ValueError:
+            print("something went wrong...Please enter the correct product code..... ")
+
+    else:
+        print("Username or password is invalid..")
+
+
+
+def prompt_remove_all():
+    user = input("Please enter your username: ")
+    password = input("Please enter your password: ")
+    if user == "admin" and password == "hello":
+        ask = input("[ALERT!!!!] Do you really want to remove all the products? (Y/n): ").lower()
+        if ask == "y":
+            database.remove()
+            print("NOTICE: You have removed all products...")
+        else:
+            print("NOTICE: All products exists.. No action occurred..")
+
+    else:
+        print("Username or password is invalid..")
+
+
+
+
+
+
 
 
 menu()
