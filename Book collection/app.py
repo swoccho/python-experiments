@@ -1,7 +1,6 @@
-
 from utils import database
 
-USER_CHOICE ="""
+USER_CHOICE = """
 Enter:
 - press 'a' to add book on your collection,
 - press 'del' to remove books,
@@ -10,6 +9,7 @@ Enter:
 - press 'q' to quit.
 
 Your Choice: """
+
 
 def menu():
     database.create_book_file()
@@ -23,15 +23,16 @@ def menu():
         elif user_prompt == "s":
             show_books()
 
+        elif user_prompt == "re":
+            remove_all()
 
-
-        elif user_prompt== "r":
+        elif user_prompt == "r":
             prompt_mark_as_read()
         else:
             print("Unknown command.... Please try again...")
 
         again = input(
-                      "Want to Interact Again ?? (Y/n): ").lower()
+            "Want to Interact Again ?? (Y/n): ").lower()
         if again == "y":
             user_prompt = input(USER_CHOICE)
         else:
@@ -42,17 +43,15 @@ def prompt_add_books():
     name = input("Enter a book name: ").title()
     author = input("Enter the book Author name: ").title()
 
-    database.add_books(name,author)
-
+    database.add_books(name, author)
 
 
 def show_books():
     books = database.get_all_books()
     for book in books:
         print(f"{book['name']} by {book['author']} ,{book['read']} \n")
-    if books == []:
+    if not books:
         print("you have not added any books on your collection yet.. please add some books on your collection ..")
-
 
 
 def prompt_mark_as_read():
@@ -61,17 +60,14 @@ def prompt_mark_as_read():
     database.mark_as_read(name)
 
 
-
 def prompt_remove_book():
     name = input("Enter the name which you want to remove from your collection: ").title()
     database.remove_book(name)
+    print(f"{name} is removed from your collection")
+
+
+def remove_all():
+    database.remove()
 
 
 menu()
-
-
-
-
-
-
-
