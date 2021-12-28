@@ -27,7 +27,12 @@ def menu():
         elif user_1st == 'd':
             show_all()
         elif user_1st == "re":
-            database.remove()
+            ask = input("[ALERT!!!!] Do you really want to remove all the products? (Y/n): ").lower()
+            if ask == "y":
+                database.remove()
+                print("NOTICE: You have removed all products...")
+            else:
+                print("NOTICE: All products exists.. No action occurred..")
 
         elif user_1st == "u":
             prompt_price_update()
