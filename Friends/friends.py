@@ -17,4 +17,3 @@ for friend in nearby_friends:
 nearby_friends_file.close()
 
 
-hello...
