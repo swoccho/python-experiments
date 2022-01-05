@@ -13,7 +13,6 @@ def create_table():
     connection.commit()
     connection.close()
 
-
 def add_new_product(product_code, product_name, price, amount, time):
     connection = sqlite3.connect("data.db")
     cursor = connection.cursor()
