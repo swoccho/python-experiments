@@ -1,5 +1,5 @@
-from utils import database
-import datetime
+from utils import database, admin_database
+import datetime,random
 
 user_choice = """
 - press 'a' to add product ,
@@ -7,14 +7,25 @@ user_choice = """
 - press 'm' to sell more than one product ,
 - press 'd' to to see product stock in hand now, 
 - press 'r' to re-stock products,
-- press 'p' to update any product price,
+- press 'c' to access admin panel,
 - press 'q' to quit the inventory.
 
 Your Choice: """
 
+admin_choice = """
+( ADMIN PANEL )
+- press 'p' to update any product price,
+- press 're' to remove all products,
+- press 'rs' to remove a specific product, 
+- press 'n' to create a new admin account,
+- press 'q' to quit admin panel.
+
+Admin Choice : """
+
 
 def menu():
     database.create_table()
+    admin_database.admin_create_table()
     user_1st = input(user_choice).lower()
     while user_1st != "q":
         if user_1st == "a":
@@ -29,15 +40,14 @@ def menu():
         elif user_1st == "re":
             prompt_remove_all()
 
-        elif user_1st == "p":
-            prompt_price_update()
-
         elif user_1st == "r":
             update()
 
         elif user_1st == "rs":
             prompt_remove_specific()
 
+        elif user_1st == "c":
+            admin_panel()
 
         else:
             print("Unknown Command.... Please try again.....")
@@ -92,21 +102,12 @@ def show_all():
 
 
 def prompt_price_update():
-
-
-
     try:
-        user = input("Please enter your user name: ")
-        password = input("Please enter your password: ")
-        if user == "admin" and password == "hello":
 
-            product_code = int(input("Enter product code to update the price: "))
-            price = int(input("Enter the price to update: "))
+        product_code = int(input("Enter product code to update the price: "))
+        price = int(input("Enter the price to update: "))
 
-            database.update_price(product_code, price)
-
-        else:
-            print("Username or password is invalid...")
+        database.update_price(product_code, price)
 
     except IndexError and ValueError:
         print("Something went wrong.... Please try again with correct number")
@@ -122,42 +123,116 @@ def update():
         print("Unknown Command.... Please try again with correct product code and amount...")
 
 
-
 def prompt_remove_specific():
-    user = input("Please enter your username: ")
-    password = input("Please enter your password: ")
-    if user == "admin" and password == "hello":
-        try:
-            product_code = int(input("Enter the product code which you want to remove: "))
-            database.remove_specific(product_code)
+    try:
+        product_code = int(input("Enter the product code which you want to remove: "))
+        database.remove_specific(product_code)
 
-        except IndexError and ValueError:
-            print("something went wrong...Please enter the correct product code..... ")
-
-    else:
-        print("Username or password is invalid..")
-
+    except IndexError and ValueError:
+        print("something went wrong...Please enter the correct product code..... ")
 
 
 def prompt_remove_all():
-    user = input("Please enter your username: ")
-    password = input("Please enter your password: ")
-    if user == "admin" and password == "hello":
-        ask = input("[ALERT!!!!] Do you really want to remove all the products? (Y/n): ").lower()
-        if ask == "y":
-            database.remove()
-            print("NOTICE: You have removed all products...")
-        else:
-            print("NOTICE: All products exists.. No action occurred..")
+    ask = input("[ALERT!!!!] Do you really want to remove all the products? (Y/n): ").lower()
+    if ask == "y":
+        database.remove()
+        print("NOTICE: You have removed all products...")
+    else:
+        print("NOTICE: All products exists.. No action occurred..")
+
+
+def admin_panel():
+    all_admin = admin_database.admin_data()
+
+    if all_admin:
+        user_name = input("Enter your username: ")
+        password = input("Enter your password: ")
+
+        for admin in all_admin:
+            if admin["username"] == user_name and admin["password"] == password:
+                admin_input = input(admin_choice).lower()
+                while admin_input != "q":
+                    if admin_input == "p":
+                        prompt_price_update()
+
+                    elif admin_input == "re":
+                        prompt_remove_all()
+
+                    elif admin_input == "rs":
+                        prompt_remove_specific()
+
+                    elif admin_input == "n":
+                        create_admin_account()
+
+                    else:
+                        print("Unknown Command... Please try again.")
+
+                    admin_input = input(admin_choice)
+
+            # else:
+            #     print("Invalid Command")
+
+            # elif admin["username"] != user_name or admin["password"] != password:
+            #     print("Invalid credentials given. Please try again...")
+
+    elif not all_admin:
+            print("NO admin account found... please login with the default account...")
+            admin_database.add_admin_data(admin_database.default_user(), admin_database.default_user(), "admin@gmail.com")
+
+
+
+                # forget = input("Forget Password ? Wanna reset your password ? (Y/n): ").lower()
+                #
+                # if forget == "y":
+                #     user_name= input("Enter your username: ")
+                #     if admin["username"] == user_name:
+                #         email = input("Enter your email which you have used for admin panel : ")
+                #         if admin["email"] == email:
+                #             otp = random.randint(1000,9999)
+                #             admin_database.admin_pass_recovery(email,otp)
+                #             otp_ask = int(input("Enter the OTP: "))
+                #             if otp == otp_ask:
+                #                 new_pass = input("Enter your new password: ")
+                #                 confirm_pass = input("Confirm new your password: ")
+                #                 if new_pass == confirm_pass :
+                #                     admin_database.recovery_pass_update(user_name,confirm_pass)
+                #
+                #                 else:
+                #                     print("Password does not match!!!.")
+                #             else:
+                #                 print("Invalid OTP....Please try again with a correct OTP.")
+                #         else:
+                #             print("Wrong Email Address. Please try again with that email which has used for registration in this inventory...")
+                #     else:
+                #         print("Invalid Username...Please try again..")
+                # else:
+                #     break
+                #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def create_admin_account():
+    user_name = input("Enter the username: ")
+    email = input("Enter your email address: ")
+    password = input("Enter the password: ")
+    confirm_pass = input("Confirm your password: ")
+
+    if password == confirm_pass:
+        admin_database.add_admin_data(user_name, confirm_pass, email)
 
     else:
-        print("Username or password is invalid..")
-
-
-
-
-
-
+        print("password not matched...")
 
 
 menu()
