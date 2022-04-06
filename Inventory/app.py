@@ -1,5 +1,5 @@
 from utils import database, admin_database
-import datetime,random
+import datetime
 
 user_choice = """
 - press 'a' to add product ,
@@ -169,57 +169,11 @@ def admin_panel():
 
                     admin_input = input(admin_choice)
 
-            # else:
-            #     print("Invalid Command")
 
-            # elif admin["username"] != user_name or admin["password"] != password:
-            #     print("Invalid credentials given. Please try again...")
 
     elif not all_admin:
             print("NO admin account found... please login with the default account...")
             admin_database.add_admin_data(admin_database.default_user(), admin_database.default_user(), "admin@gmail.com")
-
-
-
-                # forget = input("Forget Password ? Wanna reset your password ? (Y/n): ").lower()
-                #
-                # if forget == "y":
-                #     user_name= input("Enter your username: ")
-                #     if admin["username"] == user_name:
-                #         email = input("Enter your email which you have used for admin panel : ")
-                #         if admin["email"] == email:
-                #             otp = random.randint(1000,9999)
-                #             admin_database.admin_pass_recovery(email,otp)
-                #             otp_ask = int(input("Enter the OTP: "))
-                #             if otp == otp_ask:
-                #                 new_pass = input("Enter your new password: ")
-                #                 confirm_pass = input("Confirm new your password: ")
-                #                 if new_pass == confirm_pass :
-                #                     admin_database.recovery_pass_update(user_name,confirm_pass)
-                #
-                #                 else:
-                #                     print("Password does not match!!!.")
-                #             else:
-                #                 print("Invalid OTP....Please try again with a correct OTP.")
-                #         else:
-                #             print("Wrong Email Address. Please try again with that email which has used for registration in this inventory...")
-                #     else:
-                #         print("Invalid Username...Please try again..")
-                # else:
-                #     break
-                #
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def create_admin_account():
