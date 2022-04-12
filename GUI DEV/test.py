@@ -5,7 +5,7 @@ def greet():
 
 
 root = tk.Tk()
-root.title("hello")
+root.title("hello world" )
 
 greet_button = ttk.Button(root,text="greet " ,command=greet)
 greet_button.pack(side="left",fill= "x" ,expand=True)
