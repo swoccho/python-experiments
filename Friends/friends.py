@@ -15,3 +15,6 @@ for friend in nearby_friends:
     print(f"Hey! {friend} is nearby......Meet with him")
     nearby_friends_file.write(f"{friend}\n")
 nearby_friends_file.close()
+
+
+
